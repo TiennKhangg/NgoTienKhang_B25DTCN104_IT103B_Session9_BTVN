@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mniproject</title>
+</head>
+
+<body>
+    <script>
+        let choice;
+        let product = [
+            "Iphone 15 - 10 - 600",
+            "Samsung S25 - 5 - 650",
+            "Oppo Ren o - 0 - 399",
+            "Xiaomi 13 - 8 - 400",
+            "Nokia C20 - 15 - 700",
+
+        ]
+        do {
+            choice = Number(prompt(
+                `Hệ Thóng Quản Lý Kho Hàng
+                1. Lọc sản phẩm cao cấp (>500)
+                2. Kiểm định trạng thái dữ liệu (Hết hàng/Giá sàn)
+                3.Phân tích giá trị vốn hóa (Tổng tài sản)
+                4. Triển khai chiến dịch chiết khấu (Giảm 10%)
+                5. Truy vấn sản phẩm theo từ khóa
+                6. Báo cáo tình trạng tồn kho
+                7. Thoát chương trình`
+            ));
+            switch (choice) {
+                case 1:
+                    premiumProduct(product);
+                    break;
+                case 2:
+                    statusProduct(product);
+                    break;
+                case 3:
+                    capital(product);
+                    break;
+                case 4:
+                    discount(product);
+                    break;
+                case 5:
+                    searchProduct(product);
+                    break;
+                case 6:
+                    stockReport(product);
+                    break;
+                case 7:
+                    alert("Ứng dụng đã đóng.");
+                    break;
+            }
+        } while (choice != 7)
+        function premiumProduct(product) {
+            let about = product.filter(item => {
+                let part = item.split(" - ");
+                let price = Number(part[2]);
+                return price > 500;
+            });
+
+            let result = `Danh sách sản phẩm cao cấp (>500):\n`;
+
+            about.forEach(item => {
+                let part = item.split(" - ");
+                result += `${part[0]} - Giá: ${part[2]}\n`;
+            });
+
+            alert(result);
+        }
+
+        function statusProduct(product) {
+            let about2 = product.filter(item => {
+                let part = item.split(" - ");
+                let stocks = Number(part[1]);
+                return stocks === 0;
+
+            });
+            let result2 = product.every(item => {
+                let part = item.split(" - ");
+                let price = Number(part[2]);
+                return price > 100;
+            });
+            let result3 = "Kết quả kiểm định : \n";
+            if (about2.length > 0) {
+                result3 += "Sản phẩm hết hàng:\n";
+                about2.forEach(item => {
+                    let part = item.split(" - ");
+                    result3 += ` - ${part[0]} \n`
+                });
+            } else {
+                result3 += "Không có sản phẩm nào hết hàng"
+            }
+            result3 += `\n Tất cả sản phẩm giá > 100 : ${result2 ? "Đúng" : "Sai"}`;
+            alert(result3);
+
+
+        }
+
+        function capital(product) {
+            let cost = product.reduce((sum, item) => {
+                let part = item.split(" - ");
+                let stocks = Number(part[1]);
+                let price = Number(part[2]);
+                return sum + (stocks * price);
+
+            }, 0);
+            alert(`Tổng giá trị : ${cost} USD`);
+        }
+
+        function discount(product) {
+            product = product.map(item => {
+                let part = item.split(" - ");
+                let name = part[0];
+
+            
+                let stock = part[1];
+                let price = Number(part[2]);
+                let newPrice = (price * 0.9).toFixed(2);
+                return `${name} - ${stock} - ${newPrice}`;
+            });
+            alert("Đã giảm giá 10% cho toàn bộ sản phẩm");
+            console.log(product);
+        }
+        function searchProduct(product) {
+            let keyword = prompt("Nhập từ khóa tìm kiếm:").toLowerCase();
+            let result = product.filter(item => {
+                return item.toLowerCase().includes(keyword);
+            });
+
+            if (result.length === 0) {
+                alert("Không tìm thấy sản phẩm.");
+                return;
+            }
+
+            let output = "Kết quả tìm kiếm:\n";
+            result.forEach(item => {
+                let part = item.split(" - ");
+                output += `${part[0]} - Giá: ${part[2]} - Số lượng: ${part[1]}\n`;
+            });
+
+            alert(output);
+        }
+        function stockReport(product) {
+            let result = "Bcaos hafng toonf kho:\n";
+            product.forEach(item => {
+                let part = item.split(" - ");
+                let name = part[0];
+                let stock = Number(part[1]);
+                let status = stock > 0 ? "Còn hàng" : "Hết hàng";
+                result += `${name} - ${status}\n`;
+            });
+
+
+            alert(result);
+        }
+
+        
+    </script>
+</body>
+
+</html>
